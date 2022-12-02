@@ -20,5 +20,6 @@ def main():
 
     print(top_three)
 
+
 if __name__ == "__main__":
     main()
