@@ -68,12 +68,12 @@ def main():
         print(matchup_list)
 
     # Test Input:
-    matchup_list = [['A', 'Y'], ['B', 'X'], ['C', 'Z']]
-    shape_values = {'A': 1, 'X': 1, 'B': 2, 'Y':2, 'C': 3, 'Z': 3}
+    # matchup_list = [['A', 'Y'], ['B', 'X'], ['C', 'Z']]
 
+    shape_values = {'A': 1, 'X': 1, 'B': 2, 'Y':2, 'C': 3, 'Z': 3}
     score = 0
     for matchup in matchup_list:
-        if matchup[1] == 'Y':  # Draw: Just use opponent's shape for the shape value and add 3 for the win.
+        if matchup[1] == 'Y':  # Draw: Just use opponent's shape for the shape value and add 3 for the draw.
             score += shape_values[matchup[0]] + 3
         elif matchup[1] == 'X':  # Lose: Decide which shape to use for the shape score and add 0 for the loss.
             shape = decide_win_loss_shape(matchup[0], matchup[1])
