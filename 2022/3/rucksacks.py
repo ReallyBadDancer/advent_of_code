@@ -12,6 +12,7 @@ elf_groups = []
 for i in range(0, len(data), 3):
     elf_groups.append([data[i], data[i+1], data[i+2]])
 
+
 # Generate an ordered list of the alphabet to assign a numeric value to letters later by index.
 priority_list = string.ascii_letters
 
@@ -32,6 +33,7 @@ for sack in rucksack_compartments:
            prioritized_items.append(item)
            break
 
+
 # Add up all priority items according to their priority from the priority_list.
 items_sum = 0
 for item in prioritized_items:
@@ -49,6 +51,7 @@ for group in elf_groups:
         if letter in group[0] and letter in group[1] and letter in group[2]:
             badges.append(letter)
             break
+
 
 # Sum all badge values together as in part 1.
 items_sum = 0
