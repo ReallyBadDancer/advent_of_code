@@ -13,15 +13,14 @@ def compare_current_symbols(symbol_list: deque) -> bool:
 # with open("example_input.txt", mode='r') as infile:
 with open("puzzle_input.txt", mode='r') as infile:
     data = infile.read()
-    print(data)
 
 part_one = False
 marker = 4 if part_one else 14
 
 data_string = deque(data[:marker])
-print(data_string)
-if compare_current_symbols(data_string):
+if compare_current_symbols(data_string):  # Hey, could be the first group of characters.
     print(data_string)
+    print(marker)
 
 for symbol in data[marker:]:
     marker += 1
