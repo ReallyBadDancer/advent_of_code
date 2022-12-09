@@ -9,7 +9,8 @@ class Tree:
         self.height = height
 
     def __repr__(self):
-        return f"<h: {self.height}, vis: {self.visible}>"
+        return f"{self.visible}"
+
 
 
 # with open("puzzle_input.txt", mode='r') as infile:
@@ -23,48 +24,57 @@ for y_inx, line in enumerate(data):
         row.append(Tree(int(item)))
     tree_rows.append(row)
 
-# print(tree_rows)
+grid_size = len(tree_rows[0])
 
+# Top and bottom row
+for y in [0, grid_size-1]:
+    for x in range(grid_size):
+        tree_rows[y][x].visible = 1
 
-# Assign all edges visible
-for y, tree_row in enumerate(tree_rows):
-    for x, tree in enumerate(tree_row):
-        if y == 0 or y == len(tree_rows)-1:
-            tree.visible = 1
-        elif x == 0 or x == len(tree_row)-1:
-            tree.visible = 1
+# First and last column
+for x in [0, grid_size-1]:
+    for y in range(grid_size):
+        tree_rows[y][x].visible = 1
 
-# Walk left to right
-for y, tree_row in enumerate(tree_rows):
+# Row by row, forward
+for y in range(0, grid_size):
     h_max = 0
-    for x, tree in enumerate(tree_row):
-        if tree.height > h_max:
-            h_max = tree.height
-            tree.visible = 1
+    for x in range(0, grid_size):
+        if tree_rows[y][x].height > h_max:
+            h_max = tree_rows[y][x].height
+            tree_rows[y][x].visible = 1
 
-# Walk right to left
-for y, tree_row in enumerate(tree_rows):
+# Row by row, backward
+for y in range(0, grid_size):
     h_max = 0
-    for x, tree in reversed(list(enumerate(tree_row))):
-        if tree.height > h_max:
-            h_max = tree.height
-            tree.visible = 1
+    for x in range(grid_size-1, 0, -1):
+        if tree_rows[y][x].height > h_max:
+            h_max = tree_rows[y][x].height
+            tree_rows[y][x].visible = 1
 
-# Walk top to bottom
-for y, tree_row in enumerate(tree_rows):
+# Column by column, forward
+for x in range(0, grid_size):
     h_max = 0
+    for y in range(0, grid_size):
+        if tree_rows[y][x].height > h_max:
+            h_max = tree_rows[y][x].height
+            tree_rows[y][x].visible = 1
 
-
-
-
-
-
-
-
-
-
-
+# Column by column, backward
+for x in range(0, grid_size):
+    h_max = 0
+    for y in range(grid_size-1, 0, -1):
+        if tree_rows[y][x].height > h_max:
+            h_max = tree_rows[y][x].height
+            tree_rows[y][x].visible = 1
 
 for row in tree_rows:
     print(row)
 
+visible_trees = 0
+for row in tree_rows:
+    for tree in row:
+        visible_trees += tree.visible
+
+print(visible_trees
+      )
