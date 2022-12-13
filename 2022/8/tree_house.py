@@ -17,10 +17,10 @@ class Tree:
 
     def __repr__(self):
         # return f"<h,n,s,e,w,score: {self.height}, {self.n_score}, {self.s_score}, {self.e_score}, {self.w_score}, {self.scenic_score}>"
-        return f"<{self.height}:{self.n_score}>"
+        return f"<{self.height}:{self.scenic_score}>"
 
-with open("example_input.txt") as infile:
-# with open("puzzle_input.txt") as infile:
+# with open("example_input.txt") as infile:
+with open("puzzle_input.txt") as infile:
     data = infile.read().split('\n')
 
 tree_rows = []
@@ -83,32 +83,45 @@ for row in tree_rows:
 
 print(f"Part 1 answer: {visible_trees}")
 
-# Assign 0 for all trees on edges.
-for tree in tree_array[0]:
-    tree.n_score=0
-for tree in tree_array[grid_size-1]:
-    tree.s_score=0
-for tree in tree_array[:,0]:
-    tree.w_score=0
-for tree in tree_array[:, grid_size-1]:
-    tree.e_score=0
-
-def check_tree_height(current, compared):
-
-
-# Calculate n_scores and s_scores for North and South-looking scenery.
+# Calculate scores for each direction for each tree.
 for x in range(grid_size):
     for y in range(grid_size):
         curr_tree = tree_array[y, x]
-        if y == 0 or y == grid_size-1:
-            continue
-        for tree in tree_array[y-1::-1, x]:
-            curr_array = tree_array[y-1::-1, x]  #Debug
-            if curr_tree.height <= tree.height:
-                curr_tree.n_score += 1
-                break
-            else:
-                curr_tree.n_score += 1
-        for tree in tree_array[y+1:,x]:
+        if 0 < y < grid_size-1:
+            for tree in tree_array[y-1::-1, x]:  # Calcualte N scores
+                if curr_tree.height <= tree.height:
+                    curr_tree.n_score += 1
+                    break
+                else:
+                    curr_tree.n_score += 1
+            for tree in tree_array[y+1:,x]:  # Calculate S scores
+                if curr_tree.height <= tree.height:
+                    curr_tree.s_score += 1
+                    break
+                else:
+                    curr_tree.s_score += 1
+        if 0 < x < grid_size-1:
+            for tree in tree_array[y, x-1::-1]:  # Calculate W score
+                if curr_tree.height <= tree.height:
+                    curr_tree.w_score += 1
+                    break
+                else:
+                    curr_tree.w_score += 1
+            for tree in tree_array[y, x+1:]:  # Calculate W score
+                curr_array = tree_array[y, x+1:]  # Debug
+                if curr_tree.height <= tree.height:
+                    curr_tree.e_score += 1
+                    break
+                else:
+                    curr_tree.e_score += 1
 
-print(tree_array)
+max_score = 0
+for x in range(grid_size):
+    for y in range(grid_size):
+        tree_array[y,x].calculate_scenic_score()
+        if tree_array[y,x].scenic_score > max_score:
+            max_score = tree_array[y,x].scenic_score
+
+# print(tree_array)
+print(f"Part 2 answer: {max_score}")
+
