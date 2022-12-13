@@ -1,4 +1,5 @@
 import numpy as np
+import sys
 
 
 class Tree:
@@ -16,7 +17,7 @@ class Tree:
 
     def __repr__(self):
         # return f"<h,n,s,e,w,score: {self.height}, {self.n_score}, {self.s_score}, {self.e_score}, {self.w_score}, {self.scenic_score}>"
-        return f"<{self.scenic_score}>"
+        return f"<{self.height}:{self.n_score}>"
 
 with open("example_input.txt") as infile:
 # with open("puzzle_input.txt") as infile:
@@ -92,47 +93,22 @@ for tree in tree_array[:,0]:
 for tree in tree_array[:, grid_size-1]:
     tree.e_score=0
 
+def check_tree_height(current, compared):
+
+
 # Calculate n_scores and s_scores for North and South-looking scenery.
 for x in range(grid_size):
     for y in range(grid_size):
         curr_tree = tree_array[y, x]
-        y_temp = y
-        while y_temp != 0 and tree_array[y_temp-1][x].height < tree_array[y, x].height:
-            tree_array[y, x].n_score += 1
-            y_temp -= 1
-            if y_temp == 0:
-                tree_array[y, x].n_score += 1
-        y_temp = y
-        while y_temp < grid_size-1 and tree_array[y_temp+1][x].height < tree_array[y, x].height:
-            tree_array[y, x].s_score += 1
-            y_temp += 1
-            if y_temp == grid_size-1:
-                tree_array[y, x].n_score += 1
-
-for y in range(grid_size):
-    for x in range(grid_size):
-        curr_tree = tree_array[y, x]
-        x_temp = x
-        while x_temp != 0 and tree_array[y][x_temp-1].height < tree_array[y, x].height:
-            tree_array[y, x].w_score += 1
-            x_temp -= 1
-            if x_temp == 0:
-                tree_array[y, x].w_score += 1
-        x_temp = x
-        while x_temp < grid_size-1 and tree_array[y][x_temp+1].height < tree_array[y, x].height:
-            tree_array[y, x].e_score += 1
-            x_temp += 1
-            if x_temp == grid_size-1:
-                tree_array[y, x].e_score += 1
-
-
-for y in range(grid_size):
-    for x in range(grid_size):
-        curr_tree = tree_array[y,x]
-        tree_array[y, x].calculate_scenic_score()
+        if y == 0 or y == grid_size-1:
+            continue
+        for tree in tree_array[y-1::-1, x]:
+            curr_array = tree_array[y-1::-1, x]  #Debug
+            if curr_tree.height <= tree.height:
+                curr_tree.n_score += 1
+                break
+            else:
+                curr_tree.n_score += 1
+        for tree in tree_array[y+1:,x]:
 
 print(tree_array)
-
-
-
-
