@@ -74,8 +74,3 @@ for step in instructions:
 # print(rope_tail.position_history)
 answer = set([tuple(i) for i in rope[-1].position_history])
 print(len(answer))
-
-
-
-
-
