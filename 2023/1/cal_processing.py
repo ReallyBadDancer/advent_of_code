@@ -9,9 +9,9 @@ zoneight234
 7pqrstsixteen"""
 test_data = test_data.split("\n")
 
-digits = [1,2,3,4,5,6,7,8,9,0]
+digits = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
 digits = [str(i) for i in digits]
-string_digits = ['one','two','three','four','five','six','seven','eight','nine','zero']
+string_digits = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'zero']
 digits = digits + string_digits
 print(digits)
 
@@ -43,19 +43,14 @@ print(cal_data)
 
 # Part 2
 print("--------------\nStart Part 2:\n--------------")
+
+# Create a dictionary mapping spelled numbers to digit numbers.
 zipped_digits = zip(string_digits, digits)
 unzipped_tuples = []
 for dig in zipped_digits:
     unzipped_tuples.append(dig)
 dig_dict = dict(unzipped_tuples)
 print("dig_dict", dig_dict)
-
-# Pseudocode:
-
-# For each line in cal_data,
-# walk through all digits and check for if it is prefix.
-#   If it is prefix, then replace line with (line.removeprefix) and continue searching
-#   If you reach the end of the string, then move to the next line
 
 results = []
 for line in cal_data:
