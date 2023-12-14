@@ -30,7 +30,7 @@ for game in split_games:  # Turn game sequence numbers into integer keys and gam
 # pprint(game_dict)
 print("Splitting all games into individual rounds:")
 for game, rounds in game_dict.items():
-    game_dict[game] = [r.split(', ') for r in rounds]  # Split all the games in the game dictionary into individual rounds.
+    game_dict[game] = [r.split(', ') for r in rounds]  # Split all the games in the game dict into individual rounds.
 
 # pprint(game_dict)
 print("Creating Dictionary Version of Games:")
@@ -49,12 +49,14 @@ for key, game in game_dict.items():
 
 # pprint(game_dict)
 
+
 class CubeGame:
     bag = {
         'red': 12,
         'green': 13,
         'blue': 14
     }
+
     def __init__(self, seq_no: int, round_set: list):
         self.seq_no = seq_no
         self.round_set = round_set
@@ -78,6 +80,7 @@ class CubeGame:
                     self.valid = False
                     break
         # print(f"Game {self.seq_no} possibility is {self.valid}.")
+
     def eval_min_required_cubes(self):
         """
         Determine the minimum number of cubes in the bag to play all the games.
@@ -100,6 +103,7 @@ class CubeGame:
         print("Total Power Level: ", self.power_level)
         return self.power_level
         # for color_value in self.min_required_cubes.values()
+
 
 print("Creating an object for each game... ")
 game_list = []
