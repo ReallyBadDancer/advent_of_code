@@ -3,7 +3,7 @@ import re
 import string
 from pprint import pprint
 
-test = False
+test = True
 ifilename = "example_input" if test else "puzzle_input"
 
 with open(ifilename) as ifile:
@@ -61,25 +61,20 @@ class EnginePart:
 
     def check_if_part(self) -> bool:
         # print(f"Checking part {self.partno}")
-        if self.colstart > 0:  # Look left
-            if self.schemrow[self.colstart-1] != '.':
+        if self.schemrow[self.colstart-1] != '.':
+            self.part = True
+            print(self.partno, " is valid")
+            return True
+        if self.schemrow[self.colend+1] != '.':
+            self.part = True
+            print(self.partno, " is valid")
+            return True
+        for col in self.prevrow[self.colstart-1:self.colend+2]:  # Look up
+            print(f"Checking above row: {self.prevrow[self.colstart - 1:self.colend + 1]}")
+            if col not in string.digits and col != '.':
                 self.part = True
                 print(self.partno, " is valid")
                 return True
-        if self.colend < len(self.schemrow):  # Look right
-            # print(f"Checking current row: {self.schemrow} character {self.schemrow[self.colend+2]}")
-            if self.schemrow[self.colend+1] != '.':
-                self.part = True
-                print(self.partno, " is valid")
-                return True
-        if self.rownum > 0:  # Look up
-            for col in self.prevrow[self.colstart-1:self.colend+2]:
-                # print(f"Checking above row: {self.prevrow[self.colstart - 1:self.colend + 1]}")
-                if col not in string.digits and col != '.':
-                    self.part = True
-                    print(self.partno, " is valid")
-                    return True
-
         for col in self.nextrow[self.colstart-1:self.colend+2]:  # Look down
             # print(f"Checking below row from index {self.colstart-1} to {self.colend+2} of {self.nextrow}: {self.nextrow[self.colstart-1:self.colend+1]}")
             if col not in string.digits and col != '.':
