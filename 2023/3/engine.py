@@ -3,8 +3,9 @@ import re
 import string
 from pprint import pprint
 
-test = True
+test = False
 ifilename = "example_input" if test else "puzzle_input"
+# ifilename = 'ben'
 
 with open(ifilename) as ifile:
     test_input = ifile.read().splitlines()
@@ -92,12 +93,11 @@ for row_num, partrow in enumerate(engine_part_numbers):
 
     slice_inx = 0
     for part in partrow:
-        # print("Creating part for item", part)
         curr_row = test_input[row_num]
         prev_row = test_input[row_num-1]
         next_row = test_input[row_num+1]
         part_start_inx = curr_row.find(part, slice_inx)
-        slice_inx = part_start_inx+1
+        slice_inx = part_start_inx + len(part)
         engine_parts.append(EnginePart(part, row_num, part_start_inx, curr_row, prev_row, next_row))
 
 answer1 = 0

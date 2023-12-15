@@ -27,7 +27,7 @@ for game in split_games:  # Turn game sequence numbers into integer keys and gam
     game[1] = game[1].split('; ')  # Split up game into individual rounds
     game_dict[game[0]] = game[1]  # Add game to game dictionary
 
-# pprint(game_dict)
+pprint(game_dict)
 print("Splitting all games into individual rounds:")
 for game, rounds in game_dict.items():
     game_dict[game] = [r.split(', ') for r in rounds]  # Split all the games in the game dict into individual rounds.
