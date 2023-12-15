@@ -2,10 +2,10 @@ import sys
 import re
 import string
 from pprint import pprint
+from engine_part import EnginePart
 
-test = False
+test = True
 ifilename = "example_input" if test else "puzzle_input"
-# ifilename = 'ben'
 
 with open(ifilename) as ifile:
     test_input = ifile.read().splitlines()
@@ -25,7 +25,7 @@ pprint(test_input)
 
 # digits = string.digits  # Going to use this to check for if something is a digit later.
 
-print("All dots removed:")
+print("All dots and symbols removed:")
 engine_part_numbers = []
 for row in test_input:
     engine_part_numbers.append(re.split(r'\D+', row))
@@ -45,46 +45,7 @@ for row in engine_part_numbers:
             row.remove('')
     except ValueError:
         pass
-pprint(engine_part_numbers)
-
-
-class EnginePart:
-    def __init__(self, partno, rownum, colstart, schemrow, prevrow, nextrow):
-        self.partno = partno
-        self.partnum = int(partno)
-        self.rownum = rownum
-        self.colstart = colstart
-        self.colend = self.colstart + len(partno) - 1
-        self.schemrow = schemrow
-        self.prevrow = prevrow
-        self.nextrow = nextrow
-        self.part = False
-
-    def check_if_part(self) -> bool:
-        # print(f"Checking part {self.partno}")
-        if self.schemrow[self.colstart-1] != '.':
-            self.part = True
-            print(self.partno, " is valid")
-            return True
-        if self.schemrow[self.colend+1] != '.':
-            self.part = True
-            print(self.partno, " is valid")
-            return True
-        for col in self.prevrow[self.colstart-1:self.colend+2]:  # Look up
-            print(f"Checking above row: {self.prevrow[self.colstart - 1:self.colend + 1]}")
-            if col not in string.digits and col != '.':
-                self.part = True
-                print(self.partno, " is valid")
-                return True
-        for col in self.nextrow[self.colstart-1:self.colend+2]:  # Look down
-            # print(f"Checking below row from index {self.colstart-1} to {self.colend+2} of {self.nextrow}: {self.nextrow[self.colstart-1:self.colend+1]}")
-            if col not in string.digits and col != '.':
-                self.part = True
-                print(self.partno, " is valid")
-                return True
-        print(self.partno, " is not a valid part.\n-----")
-        self.part = False
-        return False
+# pprint(engine_part_numbers)
 
 engine_parts = []
 for row_num, partrow in enumerate(engine_part_numbers):
@@ -93,6 +54,7 @@ for row_num, partrow in enumerate(engine_part_numbers):
 
     slice_inx = 0
     for part in partrow:
+        # print(f"Processing part {part}")
         curr_row = test_input[row_num]
         prev_row = test_input[row_num-1]
         next_row = test_input[row_num+1]
@@ -100,21 +62,68 @@ for row_num, partrow in enumerate(engine_part_numbers):
         slice_inx = part_start_inx + len(part)
         engine_parts.append(EnginePart(part, row_num, part_start_inx, curr_row, prev_row, next_row))
 
-answer1 = 0
+answer1 = 0  # Calculate final answer for part 1.
 for part in engine_parts:
     if part.check_if_part():
-        print(f"Adding {part.partno} to {answer1}")
         answer1 += part.partnum
-        print(f"Answer updated to {answer1}\n------")
-print(answer1)
+print("Answer for Part 1: ", answer1)
+print("-----\nBegin part 2:\n-----")
+
+class Gear:
+
+    # Regular expressions used to count up how many parts.
+    double_part_rex = r"\d\D\d"
+    single_part_rex = r"\d+|\D+\d+|\d+\D+"
+
+    def __init__(self, rownum, col, schemrow, prevrow, nextrow):
+        print("Making a gear!")
+        self.rownum = rownum
+        self.col = col
+        self.schemrow = schemrow
+        self.prevrow = prevrow
+        self.nextrow = nextrow
+        self.gear = False
+        self.gear_ratio_values = 0
+
+    def check_if_gear(self):
+        print("Checking if it's a real gear...")
+        num_adjacent = 0
+        # Check left and right, and add to total adjacent numbers if number found.
+        print("Checking left/right: ", self.schemrow[self.col - 1], '*', self.schemrow[self.col + 1])
+        for col in [self.schemrow[self.col-1], self.schemrow[self.col+1]]:
+            if col in string.digits:
+                print("Adding 1 part for left/right")
+                num_adjacent += 1
+        # Check prev and next rows for how many adjacent parts
+        prevrow_slice = self.prevrow[self.col-1:self.col+2]
+        nextrow_slice = self.nextrow[self.col-1:self.col+2]
+        for slice in [prevrow_slice, nextrow_slice]:
+            print("Checking above/below slice: ", slice)
+            if re.match(self.double_part_rex,slice):
+                print("Adding 2 parts for above/below")
+                num_adjacent += 2
+            elif re.match(self.single_part_rex,slice):
+                print("Adding 1 part above/below")
+                num_adjacent += 1
+        if num_adjacent == 2:
+            self.gear = True
+            print("It's a gear!")
+            self.get_gear_ratio_values()
+            return True
+        else:
+            self.gear = False
+            print("Not a gear!")
+            return False
+
+    def get_gear_ratio_values(self):
+        pass
 
 
-answer1 = 0
-for part in engine_parts:
-    if part.part:
-        answer1 += part.partnum
-print(answer1)
+gears = []
+for row_inx, row in enumerate(test_input):
+    for col_inx, col in enumerate(row):
+        if col == '*':
+            gears.append(Gear(row_inx, col_inx, row, test_input[row_inx-1], test_input[row_inx+1]))
 
-
-
-
+for gear in gears:
+    gear.check_if_gear()
