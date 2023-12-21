@@ -69,6 +69,7 @@ for part in engine_parts:
 print("Answer for Part 1: ", answer1)
 print("-----\nBegin part 2:\n-----")
 
+
 class Gear:
 
     # Regular expressions used to count up how many parts.
@@ -99,10 +100,10 @@ class Gear:
         nextrow_slice = self.nextrow[self.col-1:self.col+2]
         for slice in [prevrow_slice, nextrow_slice]:
             print("Checking above/below slice: ", slice)
-            if re.match(self.double_part_rex,slice):
+            if re.match(self.double_part_rex, slice):
                 print("Adding 2 parts for above/below")
                 num_adjacent += 2
-            elif re.match(self.single_part_rex,slice):
+            elif re.match(self.single_part_rex, slice):
                 print("Adding 1 part above/below")
                 num_adjacent += 1
         if num_adjacent == 2:
