@@ -1,10 +1,11 @@
 import sys
+import math
 import re
 import string
 from pprint import pprint
 from engine_part import EnginePart
 
-test = True
+test = False
 ifilename = "example_input" if test else "puzzle_input"
 
 with open(ifilename) as ifile:
@@ -84,6 +85,7 @@ class Gear:
         self.nextrow = nextrow
         self.gear = False
         self.gear_ratio_values = 0
+        self.adjacent_parts = []
 
     def check_if_gear(self):
         print("Checking if it's a real gear...")
@@ -98,12 +100,12 @@ class Gear:
         prevrow_slice = self.prevrow[self.col-1:self.col+2]
         nextrow_slice = self.nextrow[self.col-1:self.col+2]
         for slice in [prevrow_slice, nextrow_slice]:
-            print("Checking above/below slice: ", slice)
+            # print("Checking above/below slice: ", slice)
             if re.match(self.double_part_rex,slice):
-                print("Adding 2 parts for above/below")
+                # print("Adding 2 parts for above/below")
                 num_adjacent += 2
             elif re.match(self.single_part_rex,slice):
-                print("Adding 1 part above/below")
+                # print("Adding 1 part above/below")
                 num_adjacent += 1
         if num_adjacent == 2:
             self.gear = True
@@ -116,7 +118,20 @@ class Gear:
             return False
 
     def get_gear_ratio_values(self):
-        pass
+        for line in [self.prevrow, self.nextrow]:
+            for match in re.finditer(r"\d+", line):
+                if match.start(0) - 1 <= self.col <= match.end(0):
+                    print("Printing above/below part number for gear:")
+                    print(match.group())
+                    self.adjacent_parts.append(int(match.group()))
+        for match in re.finditer(r"\d+", self.schemrow):
+            print(match.group(), match.start(0), match.end(0), self.col)
+            if match.start(0) - 1 == self.col or match.end(0) == self.col:
+                print("Printing side part number for gear:")
+                print(match.group())
+                self.adjacent_parts.append(int(match.group()))
+        self.gear_ratio_values = math.prod(self.adjacent_parts)
+
 
 
 gears = []
@@ -125,5 +140,9 @@ for row_inx, row in enumerate(test_input):
         if col == '*':
             gears.append(Gear(row_inx, col_inx, row, test_input[row_inx-1], test_input[row_inx+1]))
 
+answer2 = 0
 for gear in gears:
     gear.check_if_gear()
+    answer2 += gear.gear_ratio_values
+
+print(answer2)
