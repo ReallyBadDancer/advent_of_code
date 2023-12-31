@@ -19,10 +19,3 @@ class Card:
             if num in self.winners:
                 self.card_score = 1 if self.card_score == 0 else (self.card_score * 2)
         return self.card_score
-
-    def calculate_card_pile_size(self):
-        print(f"Finding card pile for card {self.card_no}.")
-        # Determine how many winning numbers there are in the NWH.
-        # print(f"Card {self.card_no} has {self.card_score} winning numbers.")
-
-
