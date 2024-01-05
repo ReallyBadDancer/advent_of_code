@@ -56,5 +56,8 @@ for seed in seeds:
 print("\nAnswer for part 1:")
 print(min(P1))
 
+P2 = []
+
+
 
 
