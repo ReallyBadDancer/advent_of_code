@@ -44,23 +44,22 @@ def get_hand_type(h: list) -> int:
     # h = list(h)
     counts = [h.count(i) for i in card_strengths]  # Get a count of each card within the hand to find pairs, etc
 
-    for c in card_faces:
-        # counts[i] = h.count(c)
-        if 5 in counts:  # 5 of a kind
-            return 7
-        if 4 in counts:  # 4 of a kind
-            return 6
-        if 3 in counts:  # 3 of a kind or full house?
-            if 2 in counts:
-                return 5  # Full house
-            else:
-                return 4  # 3 of a kind
-        if 2 in counts:  # Two pair or pair?
-            counts.remove(2)  # Remove this pair to try and find a second pair.
-            if 2 in counts:
-                return 3  # Two pair
-            else:
-                return 2  # Pair
+
+    # counts[i] = h.count(c)
+    if 5 in counts:  # 5 of a kind
+        return 7
+    if 4 in counts:  # 4 of a kind
+        return 6
+    if 3 in counts:  # 3 of a kind or full house?
+        if 2 in counts:
+            return 5  # Full house
+        else:
+            return 4  # 3 of a kind
+    if 2 in counts:  # Two pair or pair?
+        if counts.count(2) == 2:
+            return 3  # Two pair
+        else:
+            return 2  # Just one pair
     return 1  # High Card
 
 
