@@ -2,6 +2,7 @@ from pprint import pp
 from itertools import cycle
 import re
 import math
+import time
 
 input_type = 'p'
 input_types = {'v': 'test_vector', 'e': 'example_input', 'p': 'puzzle_input'}
@@ -63,21 +64,20 @@ class Ghost:
         return f"Ghost {self.initial_loc} at {self.loc} with multiple {self.multiple}"
 
 
-ghosts = [Ghost(l, network) for l in starting_locs]
+ghosts = [Ghost(i, network) for i in starting_locs]
 pp(ghosts)
 
 print("Determine how many hops it takes for each ghost to get to its first 'Z' ending: ")
 hops = 1
 ghosts_with_multiple = []
 for d in directions:
-    if not ghosts or hops > 1e5:  # All ghosts removed from original list.
+    if all([g.multiple for g in ghosts]):  # All ghosts have a multiple
         break
     for g in ghosts:
         if g.hop(d, hops):
             ghosts_with_multiple.append(g)
-            ghosts.remove(g)
-    else:
-        hops += 1
+            print(hops, ghosts)
+    hops += 1
 
 multiple_list = []
 for g in ghosts_with_multiple:
@@ -86,6 +86,10 @@ for g in ghosts_with_multiple:
 
 print(f"List of multiples: {multiple_list}. Get least-common multiple:")
 
+wrong_answers = [776131132920, 6804426182583304574940480]
 answer2 = math.lcm(*multiple_list)
 print("Part 2 Answer: ", answer2)
-print("The first wrong answer was 776131132920")
+if answer2 in wrong_answers:
+    print("This answer is wrong.")
+if answer2 == 14299763833181:
+    print("This answer is probably correct.")
