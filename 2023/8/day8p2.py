@@ -1,23 +1,23 @@
 from pprint import pp
 from itertools import cycle
 import re
+import math
 
 input_type = 'p'
-input_types = {'v':'test_vector', 'e': 'example_input', 'p': 'puzzle_input'}
+input_types = {'v': 'test_vector', 'e': 'example_input', 'p': 'puzzle_input'}
 ifilename = input_types[input_type]
 
 print("\nImport Raw data:")
 with open(ifilename) as ifile:
     data = ifile.readlines()
 data = [i.strip() for i in data]
-# print(data)
 
 print("\nExtract directions:")
 directions = data[0]
 print(directions)
 directions = cycle(directions)  # Create an infinite cycle of directions.
 
-print("\nParse network nodes into lists, also get a list of starting nodes:")
+print("\nParse network nodes into lists:")
 network = []
 start_nodes = []
 for n in data[2:]:
@@ -26,7 +26,7 @@ for n in data[2:]:
     for i in node:
         temp_node.append(i.group())
     network.append(temp_node)
-pp(network)
+# pp(network)
 
 print("\nGet a list of starting locations:")
 starting_locs = []
@@ -37,7 +37,7 @@ print(starting_locs)
 
 print("\nCreate a dictionary of form {location: left, right}")
 network = {n[0]: {'L': n[1], 'R': n[2]} for n in network}
-pp(network)
+# pp(network)
 
 print("\nMake a ghost at each starting node:")
 
@@ -45,38 +45,47 @@ print("\nMake a ghost at each starting node:")
 class Ghost:
     def __init__(self, loc, network):
         self.loc = loc
+        self.initial_loc = loc
         self.network = network
+        self.multiple = 0
 
-    def hop(self, direction: str):
+    def hop(self, direction: str, hop_no: int):
         new_loc = self.network[self.loc][direction]
         # print(f"Ghost at {self.loc} going {direction} to {new_loc}")
         self.loc = new_loc
         if self.loc[-1] == 'Z':
+            print(f"Ghost {self.initial_loc} found ending at {self.loc} on hop {hop_no}")
+            if not self.multiple:
+                self.multiple = hop_no
             return True
 
     def __repr__(self):
-        return f"Ghost at {self.loc}"
+        return f"Ghost {self.initial_loc} at {self.loc} with multiple {self.multiple}"
 
 
 ghosts = [Ghost(l, network) for l in starting_locs]
 pp(ghosts)
 
+print("Determine how many hops it takes for each ghost to get to its first 'Z' ending: ")
 hops = 1
+ghosts_with_multiple = []
 for d in directions:
-    if hops % 1e6 == 0:
-        print(f"Hop {hops}. Going {d}")
-    if all([g.hop(d) for g in ghosts]):
-        print("Part 2 Answer: ", hops)
-        exit(0)
+    if not ghosts or hops > 1e5:  # All ghosts removed from original list.
+        break
+    for g in ghosts:
+        if g.hop(d, hops):
+            ghosts_with_multiple.append(g)
+            ghosts.remove(g)
     else:
         hops += 1
-    #
-    # next_loc = network[curr_loc][d]
-    # print(f"Location: {curr_loc}:{network[curr_loc]}. Going {d} to {next_loc}. Total Hops: {hops}")
-    # curr_loc = next_loc
-    # hops += 1
-    # if curr_loc == 'ZZZ':
-    #     print(f"Found {curr_loc}. Total hops: {hops}")
-    #     break
 
+multiple_list = []
+for g in ghosts_with_multiple:
+    multiple_list.append(g.multiple)
+    print(g)
 
+print(f"List of multiples: {multiple_list}. Get least-common multiple:")
+
+answer2 = math.lcm(*multiple_list)
+print("Part 2 Answer: ", answer2)
+print("The first wrong answer was 776131132920")
