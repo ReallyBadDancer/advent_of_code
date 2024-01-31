@@ -42,4 +42,3 @@ for d in directions:
         break
 
 print("Part 1 Answer: ", hops)
-print("The first wrong answer was 1084, second was 1085")
