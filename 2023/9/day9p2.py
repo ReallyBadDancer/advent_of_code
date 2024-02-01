@@ -51,7 +51,7 @@ class History:
     def predict_next_value(self):
         next_value = 0
         for s in reversed(self.sequences):
-            s[-1] = s[-2] - next_value
+            s[-1] = s[-2] - next_value  # Reverse the sign here for part 2.
             next_value = s[-1]
 
 
