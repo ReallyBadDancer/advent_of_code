@@ -15,18 +15,19 @@ def get_start_stop_inx(do_dont_pattern, data_in):
         output.append(pattern.start())
     return output
 
-
+# Regex expressions
 mul_pattern = re.compile(r"mul\((\d+),(\d+)\)")
 dont_mul_pattern = re.compile(r"don't\(\)")
 do_mul_pattern = re.compile(r"do\(\)")
 
+# Import data as a big string
 data = aoc_utils.import_data_as_string(example=False)
 print(data)
 
+# Get the indices where do and don't operations occur.
 do_inxs = get_start_stop_inx(do_mul_pattern, data)
 dont_inxs = get_start_stop_inx(dont_mul_pattern, data)
 do_inxs = [0] + do_inxs
-
 print("DO Indices:\n", do_inxs, "\nDONT Indices:\n", dont_inxs)
 
 # Create a "mask" so that we can filter out the parts of the string that contain invalid mul operations
