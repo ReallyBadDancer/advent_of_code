@@ -2,8 +2,6 @@ import aoc_utils
 import re
 
 mul_pattern = re.compile(r"mul\((\d+),(\d+)\)")
-dont_mul_pattern = re.compile(r"don't\(\)")
-do_mul_pattern = re.compile(r"do\(\)")
 
 data = aoc_utils.import_data_as_string(example=False)
 print(data)

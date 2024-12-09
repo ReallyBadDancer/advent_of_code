@@ -15,6 +15,7 @@ def get_start_stop_inx(do_dont_pattern, data_in):
         output.append(pattern.start())
     return output
 
+
 # Regex expressions
 mul_pattern = re.compile(r"mul\((\d+),(\d+)\)")
 dont_mul_pattern = re.compile(r"don't\(\)")
