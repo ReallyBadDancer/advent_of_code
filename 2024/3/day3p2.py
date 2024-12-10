@@ -51,7 +51,7 @@ masked_data = []
 for m, d in zip(data_mask, data):
     if m:
         masked_data.append(d)
-masked_data = ''.join(map(str, masked_data))
+masked_data = ''.join(masked_data)
 print("MASKED DATA:\n", masked_data)
 
 # Total up the multiplications as before in part 1
