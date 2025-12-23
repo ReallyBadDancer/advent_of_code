@@ -13,4 +13,3 @@ def import_data_as_lines(example=True):
         data = ifile.readlines()
         data = [d.strip() for d in data]
     return data
-
