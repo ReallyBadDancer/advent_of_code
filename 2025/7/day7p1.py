@@ -1,6 +1,6 @@
 from pprint import pprint
 
-EXAMPLE = False
+EXAMPLE = True
 
 if __name__ == "__main__":
     ifilename = "example_input" if EXAMPLE else "puzzle_input"
@@ -17,8 +17,8 @@ if __name__ == "__main__":
         if i == len(data) - 1:
             break
         for inx, c in enumerate(data[i]):
-            if inx == 0:
-                continue
+            # if inx == 0:
+            #     continue
             if data[i - 1][inx] in ('S', '|'):
                 if c == '^':  # Handle splitters
                     splits += 1
