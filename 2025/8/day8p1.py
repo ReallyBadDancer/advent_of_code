@@ -64,6 +64,3 @@ if __name__ == "__main__":
     
     print("Answer: ", sizes[0] * sizes[1] * sizes[2])
     
-    
-        
-    
